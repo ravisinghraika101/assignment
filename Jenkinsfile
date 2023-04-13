@@ -1,5 +1,5 @@
 pipeline {
-    agent     
+    agent any   
     stages {
         stage(' dockerhub login') {
             steps {
@@ -23,6 +23,9 @@ pipeline {
                 }
             }
 }
+
+
+                
 
 
                 
