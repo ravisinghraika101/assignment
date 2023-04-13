@@ -1,3 +1,38 @@
-FROM Ubuntu
-RUN apt update
+pipeline {
+    agent     
+    stages {
+        stage('Git Clone') {
+            steps {
+            script {
+                git branch: 'main', credentialsID: 'GitCred' , url:'https://github.com/ravisinghraika101/assignment.git'
+                sh 'ls'
+            }
+        }
+    }
+
+        stage(' dockerhub login') {
+            steps {
+                steps{ withCredentials([usernamePasswod(credentialsId:'DockerCred', passwordVariable: 'password', username: 'username')])
+                sh 'docker logn -u $username -p $password'
+            }
+        }
+    }
+        stage('Build Image') {
+             steps {
+                  sh  'docker build -t assignment-image . '
+                  
+             }
+        }
+                stage ('Push Image') {
+                    steps {
+                        sh '''
+                        docker tag assignment-image ravisingh1234/assignment-image:tagname
+                        docker push ravisingh1234/assignment-image:tagname
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
                 
